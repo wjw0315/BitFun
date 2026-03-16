@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
+import { Loader2 } from 'lucide-react';
 import LanguageToggleButton from '../components/LanguageToggleButton';
 import { useI18n } from '../i18n';
 import { RemoteSessionManager } from '../services/RemoteSessionManager';
@@ -72,6 +73,13 @@ function SessionTypeIcon({ agentType }: { agentType: string }) {
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
     </svg>
   );
+}
+
+function SessionStatusIndicator({ state }: { state?: { type: 'idle' | 'processing' | 'error' } }) {
+  if (state?.type === 'processing') {
+    return <Loader2 size={10} className="session-list__item-status-indicator session-list__item-status-indicator--running" />;
+  }
+  return null;
 }
 
 const ThemeToggleIcon: React.FC<{ isDark: boolean }> = ({ isDark }) => (
@@ -370,9 +378,12 @@ const SessionListPage: React.FC<SessionListPageProps> = ({ sessionMgr, onSelectS
                 <div className="session-list__item-body">
                   <div className="session-list__item-top">
                     <div className="session-list__item-name">{s.name || t('sessions.untitledSession')}</div>
-                    <span className={`session-list__agent-badge session-list__agent-badge--${s.agent_type}`}>
-                      {agentLabel(s.agent_type, t)}
-                    </span>
+                    <div className="session-list__item-meta-row">
+                      <span className={`session-list__agent-badge session-list__agent-badge--${s.agent_type}`}>
+                        {agentLabel(s.agent_type, t)}
+                      </span>
+                      <SessionStatusIndicator state={s.state} />
+                    </div>
                   </div>
                   <div className="session-list__item-time">{formatTime(s.updated_at, language, t)}</div>
                 </div>

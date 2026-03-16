@@ -186,6 +186,27 @@
     opacity: 0.78;
   }
 
+  &__session-status-indicator {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--running {
+      color: var(--color-success, #4caf50);
+      animation: bitfun-status-spin 1s linear infinite;
+    }
+  }
+
+  @keyframes bitfun-status-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   &__inline-item-tooltip {
     display: flex;
     flex-direction: column;

@@ -424,10 +424,38 @@
   overflow: hidden;
 }
 
+.session-list__item-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
 .session-list__item-time {
   font-size: 10px;
   color: var(--color-text-muted);
   margin-top: 2px;
+}
+
+.session-list__item-status-indicator {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--running {
+    color: var(--color-success, #4caf50);
+    animation: bitfun-mobile-status-spin 1s linear infinite;
+  }
+}
+
+@keyframes bitfun-mobile-status-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .session-list__agent-badge {

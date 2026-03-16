@@ -32,6 +32,15 @@ export interface SessionInfo {
   message_count: number;
   workspace_path?: string;
   workspace_name?: string;
+  state?: SessionState;
+}
+
+export type SessionStateType = 'idle' | 'processing' | 'error';
+
+export interface SessionState {
+  type: SessionStateType;
+  error?: string;
+  recoverable?: boolean;
 }
 
 export interface RemoteModelConfig {

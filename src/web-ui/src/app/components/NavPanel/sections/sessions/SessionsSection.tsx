@@ -7,7 +7,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Pencil, Trash2, Check, X, Bot, Code2, Users, MoreHorizontal } from 'lucide-react';
+import { Pencil, Trash2, Check, X, Bot, Code2, Users, MoreHorizontal, Loader2 } from 'lucide-react';
 import { IconButton, Input, Tooltip } from '@/component-library';
 import { useI18n } from '@/infrastructure/i18n';
 import { flowChatStore } from '../../../../../flow_chat/store/FlowChatStore';
@@ -25,6 +25,7 @@ import {
 } from '@/flow_chat/services/openBtwSession';
 import { resolveSessionRelationship } from '@/flow_chat/utils/sessionMetadata';
 import { compareSessionsForDisplay } from '@/flow_chat/utils/sessionOrdering';
+import { getSessionTaskStatus, type SessionTaskStatus } from '@/flow_chat/utils/sessionTaskStatus';
 import './SessionsSection.scss';
 
 const MAX_VISIBLE_SESSIONS = 8;
@@ -44,6 +45,13 @@ const resolveSessionModeType = (session: Session): SessionMode => {
 
 const getTitle = (session: Session): string =>
   session.title?.trim() || `Session ${session.sessionId.slice(0, 6)}`;
+
+const SessionTaskIndicator: React.FC<{ status: SessionTaskStatus }> = ({ status }) => {
+  if (status === 'running') {
+    return <Loader2 size={10} className="bitfun-nav-panel__session-status-indicator bitfun-nav-panel__session-status-indicator--running" />;
+  }
+  return null;
+};
 
 interface SessionsSectionProps {
   workspaceId?: string;
@@ -346,6 +354,7 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
           const isRowActive = activeBtwSessionData?.childSessionId
             ? session.sessionId === activeBtwSessionData.childSessionId
             : activeTabId === AGENT_SCENE && session.sessionId === activeSessionId;
+          const taskStatus = getSessionTaskStatus(session.sessionId);
           const row = (
             <div
               className={[
@@ -411,6 +420,7 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
                     {isBtwChild ? (
                       <span className="bitfun-nav-panel__inline-item-btw-badge">btw</span>
                     ) : null}
+                    <SessionTaskIndicator status={taskStatus} />
                   </span>
                   <div className="bitfun-nav-panel__inline-item-actions">
                     <button
