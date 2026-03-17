@@ -25,7 +25,7 @@ import {
 } from '@/flow_chat/services/openBtwSession';
 import { resolveSessionRelationship } from '@/flow_chat/utils/sessionMetadata';
 import { compareSessionsForDisplay } from '@/flow_chat/utils/sessionOrdering';
-import { getSessionTaskStatus, type SessionTaskStatus } from '@/flow_chat/utils/sessionTaskStatus';
+import { getCompleteSessionStatus, type SessionTaskStatus } from '@/flow_chat/utils/sessionTaskStatus';
 import './SessionsSection.scss';
 
 const MAX_VISIBLE_SESSIONS = 8;
@@ -47,9 +47,31 @@ const getTitle = (session: Session): string =>
   session.title?.trim() || `Session ${session.sessionId.slice(0, 6)}`;
 
 const SessionTaskIndicator: React.FC<{ status: SessionTaskStatus }> = ({ status }) => {
+  // Idle: no indicator
+  if (status === 'idle') {
+    return null;
+  }
+
+  // Running: yellow spinning icon
   if (status === 'running') {
     return <Loader2 size={10} className="bitfun-nav-panel__session-status-indicator bitfun-nav-panel__session-status-indicator--running" />;
   }
+
+  // Confirming: purple pulsing dot
+  if (status === 'confirming') {
+    return <span className="bitfun-nav-panel__session-status-dot bitfun-nav-panel__session-status-dot--confirming" />;
+  }
+
+  // Completed: green static dot
+  if (status === 'completed') {
+    return <span className="bitfun-nav-panel__session-status-dot bitfun-nav-panel__session-status-dot--completed" />;
+  }
+
+  // Error: red static dot
+  if (status === 'error') {
+    return <span className="bitfun-nav-panel__session-status-dot bitfun-nav-panel__session-status-dot--error" />;
+  }
+
   return null;
 };
 
@@ -186,6 +208,13 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
       if (editingSessionId) return;
       try {
         const session = flowChatStore.getState().sessions.get(sessionId);
+        
+        // If session was completed (has lastFinishedAt), clear the completed status
+        // This resets the green status indicator back to idle when user views the session
+        if (session?.lastFinishedAt) {
+          flowChatStore.clearSessionCompleted(sessionId);
+        }
+        
         const relationship = resolveSessionRelationship(session);
         const parentSessionId = relationship.parentSessionId;
         const activateWorkspace = workspaceId && !isActiveWorkspace
@@ -354,7 +383,7 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
           const isRowActive = activeBtwSessionData?.childSessionId
             ? session.sessionId === activeBtwSessionData.childSessionId
             : activeTabId === AGENT_SCENE && session.sessionId === activeSessionId;
-          const taskStatus = getSessionTaskStatus(session.sessionId);
+          const taskStatus = getCompleteSessionStatus(session.sessionId);
           const row = (
             <div
               className={[

@@ -193,8 +193,34 @@
     justify-content: center;
 
     &--running {
-      color: var(--color-success, #4caf50);
+      color: #eab308; // Yellow-500
       animation: bitfun-status-spin 1s linear infinite;
+    }
+  }
+
+  &__session-status-dot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+
+    // Completed: green static dot (完成 - 绿色圆点)
+    &--completed {
+      background: #22c55e; // Green-500
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.4);
+    }
+
+    // Error: red static dot (错误 - 红色圆点)
+    &--error {
+      background: #ef4444; // Red-500
+      box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+    }
+
+    // Confirming: purple pulsing dot (需要人工确认 - 紫色圆点闪动)
+    &--confirming {
+      background: #a855f7; // Purple-500
+      box-shadow: 0 0 6px rgba(168, 85, 247, 0.4);
+      animation: bitfun-status-pulse 1.5s ease-in-out infinite;
     }
   }
 
@@ -204,6 +230,18 @@
     }
     to {
       transform: rotate(360deg);
+    }
+  }
+
+  // Pulsing animation for confirming status
+  @keyframes bitfun-status-pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(0.85);
     }
   }
 

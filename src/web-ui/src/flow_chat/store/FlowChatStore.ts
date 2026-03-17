@@ -1198,6 +1198,31 @@ export class FlowChatStore {
     });
   }
 
+  /**
+   * Clear the completed status of a session.
+   * This is called when user views a completed session,
+   * resetting the status indicator from completed (green) back to idle.
+   */
+  public clearSessionCompleted(sessionId: string): void {
+    this.setState(prev => {
+      const session = prev.sessions.get(sessionId);
+      if (!session) return prev;
+
+      const updatedSession: Session = {
+        ...session,
+        lastFinishedAt: undefined,
+      };
+
+      const newSessions = new Map(prev.sessions);
+      newSessions.set(sessionId, updatedSession);
+
+      return {
+        ...prev,
+        sessions: newSessions,
+      };
+    });
+  }
+
   public async updateSessionTitle(
     sessionId: string, 
     title: string, 
