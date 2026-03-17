@@ -7,7 +7,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Pencil, Trash2, Check, X, Bot, Code2, Users, MoreHorizontal, Loader2 } from 'lucide-react';
+import { Pencil, Trash2, Check, X, Bot, Code2, Users, MoreHorizontal } from 'lucide-react';
 import { IconButton, Input, Tooltip } from '@/component-library';
 import { useI18n } from '@/infrastructure/i18n';
 import { flowChatStore } from '../../../../../flow_chat/store/FlowChatStore';
@@ -46,15 +46,15 @@ const resolveSessionModeType = (session: Session): SessionMode => {
 const getTitle = (session: Session): string =>
   session.title?.trim() || `Session ${session.sessionId.slice(0, 6)}`;
 
-const SessionTaskIndicator: React.FC<{ status: SessionTaskStatus }> = ({ status }) => {
+const SessionTaskIndicator: React.FC<{ status: SessionTaskStatus }> = React.memo(({ status }) => {
   // Idle: no indicator
   if (status === 'idle') {
     return null;
   }
 
-  // Running: yellow spinning icon
+  // Running: yellow pulsing dot (处理中 - 黄色圆点闪动)
   if (status === 'running') {
-    return <Loader2 size={10} className="bitfun-nav-panel__session-status-indicator bitfun-nav-panel__session-status-indicator--running" />;
+    return <span className="bitfun-nav-panel__session-status-dot bitfun-nav-panel__session-status-dot--running" />;
   }
 
   // Confirming: purple pulsing dot
@@ -73,7 +73,7 @@ const SessionTaskIndicator: React.FC<{ status: SessionTaskStatus }> = ({ status 
   }
 
   return null;
-};
+});
 
 interface SessionsSectionProps {
   workspaceId?: string;
@@ -208,13 +208,32 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
       if (editingSessionId) return;
       try {
         const session = flowChatStore.getState().sessions.get(sessionId);
-        
+
         // If session was completed (has lastFinishedAt), clear the completed status
         // This resets the green status indicator back to idle when user views the session
         if (session?.lastFinishedAt) {
-          flowChatStore.clearSessionCompleted(sessionId);
+          // Store the original timestamp for potential rollback
+          const originalFinishedAt = session.lastFinishedAt;
+
+          try {
+            flowChatStore.clearSessionCompleted(sessionId);
+
+            // Persist the cleared completed status to disk
+            const { sessionAPI } = await import('@/infrastructure/api');
+            const metadata = await sessionAPI.loadSessionMetadata(sessionId, session.workspacePath || '');
+            const { buildSessionMetadata } = await import('@/flow_chat/utils/sessionMetadata');
+
+            const updatedSession = { ...session, lastFinishedAt: undefined };
+            const nextMetadata = buildSessionMetadata(updatedSession, metadata);
+
+            await sessionAPI.saveSessionMetadata(nextMetadata, session.workspacePath || '');
+          } catch (error) {
+            // Rollback memory state if persistence fails to maintain consistency
+            log.warn('Failed to persist cleared completed status, rolling back memory state', { sessionId, error });
+            flowChatStore.markSessionFinished(sessionId, originalFinishedAt);
+          }
         }
-        
+
         const relationship = resolveSessionRelationship(session);
         const parentSessionId = relationship.parentSessionId;
         const activateWorkspace = workspaceId && !isActiveWorkspace

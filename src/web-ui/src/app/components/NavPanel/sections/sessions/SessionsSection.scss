@@ -8,6 +8,10 @@
 @use '../../../../../component-library/styles/tokens.scss' as *;
 
 .bitfun-nav-panel {
+  // Session status animation durations
+  --session-status-animation-duration-running: 1s;
+  --session-status-animation-duration-confirming: 1.5s;
+
   &__inline-list {
     display: flex;
     flex-direction: column;
@@ -186,23 +190,18 @@
     opacity: 0.78;
   }
 
-  &__session-status-indicator {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &--running {
-      color: #eab308; // Yellow-500
-      animation: bitfun-status-spin 1s linear infinite;
-    }
-  }
-
   &__session-status-dot {
     flex-shrink: 0;
     width: 8px;
     height: 8px;
     border-radius: 50%;
+
+    // Running: yellow pulsing dot (处理中 - 黄色圆点闪动)
+    &--running {
+      background: #eab308; // Yellow-500
+      box-shadow: 0 0 6px rgba(234, 179, 8, 0.4);
+      animation: bitfun-status-pulse var(--session-status-animation-duration-running) ease-in-out infinite;
+    }
 
     // Completed: green static dot (完成 - 绿色圆点)
     &--completed {
@@ -220,20 +219,10 @@
     &--confirming {
       background: #a855f7; // Purple-500
       box-shadow: 0 0 6px rgba(168, 85, 247, 0.4);
-      animation: bitfun-status-pulse 1.5s ease-in-out infinite;
+      animation: bitfun-status-pulse var(--session-status-animation-duration-confirming) ease-in-out infinite;
     }
   }
 
-  @keyframes bitfun-status-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  // Pulsing animation for confirming status
   @keyframes bitfun-status-pulse {
     0%, 100% {
       opacity: 1;
@@ -514,6 +503,11 @@
     &__inline-item,
     &__inline-action {
       transition: none;
+    }
+
+    &__session-status-dot--running,
+    &__session-status-dot--confirming {
+      animation: none;
     }
   }
 }
