@@ -37,6 +37,10 @@ pub struct SkillInfo {
     pub level: SkillLocation,
     /// Whether enabled
     pub enabled: bool,
+    /// Keywords for intent matching
+    pub keywords: Vec<String>,
+    /// Trigger patterns for explicit matching
+    pub trigger_patterns: Vec<String>,
 }
 
 impl SkillInfo {
@@ -70,6 +74,10 @@ pub struct SkillData {
     pub path: String,
     /// Whether enabled (read from enabled field in SKILL.md, defaults to true if not present)
     pub enabled: bool,
+    /// Keywords for intent matching (extracted from SKILL.md metadata)
+    pub keywords: Vec<String>,
+    /// Trigger patterns for explicit matching (extracted from SKILL.md metadata)
+    pub trigger_patterns: Vec<String>,
 }
 
 impl SkillData {
@@ -106,6 +114,28 @@ impl SkillData {
             .and_then(|v| v.as_bool())
             .unwrap_or(true);
 
+        // keywords field - optional, defaults to empty vector
+        let keywords = metadata
+            .get("keywords")
+            .and_then(|v| v.as_sequence())
+            .map(|seq| {
+                seq.iter()
+                    .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                    .collect()
+            })
+            .unwrap_or_default();
+
+        // trigger_patterns field - optional, defaults to empty vector
+        let trigger_patterns = metadata
+            .get("trigger_patterns")
+            .and_then(|v| v.as_sequence())
+            .map(|seq| {
+                seq.iter()
+                    .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                    .collect()
+            })
+            .unwrap_or_default();
+
         let skill_content = if with_content { body } else { String::new() };
 
         Ok(SkillData {
@@ -115,6 +145,8 @@ impl SkillData {
             location,
             path,
             enabled,
+            keywords,
+            trigger_patterns,
         })
     }
 

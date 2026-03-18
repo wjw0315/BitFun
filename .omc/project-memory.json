@@ -248,6 +248,169 @@
       ]
     }
   },
-  "hotPaths": [],
+  "hotPaths": [
+    {
+      "path": "src/crates/core/src/agentic/tools/implementations/skills/types.rs",
+      "accessCount": 5,
+      "lastAccessed": 1773850274477,
+      "type": "file"
+    },
+    {
+      "path": "docs/epics/3-技能指令识别-epic.md",
+      "accessCount": 4,
+      "lastAccessed": 1773849492211,
+      "type": "file"
+    },
+    {
+      "path": "src/crates/core/src/agentic/tools/implementations/skills/registry.rs",
+      "accessCount": 4,
+      "lastAccessed": 1773850295117,
+      "type": "file"
+    },
+    {
+      "path": "docs/epics/epic-3-skills-intent-recognition.md",
+      "accessCount": 3,
+      "lastAccessed": 1773848373326,
+      "type": "file"
+    },
+    {
+      "path": "docs/naming-conventions.md",
+      "accessCount": 2,
+      "lastAccessed": 1773848572943,
+      "type": "file"
+    },
+    {
+      "path": "docs/epics/3-skills-intent-recognition-epic.md",
+      "accessCount": 2,
+      "lastAccessed": 1773848607824,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-1-skills-scanner-story.md",
+      "accessCount": 2,
+      "lastAccessed": 1773849534235,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-3-keyword-matcher-story.md",
+      "accessCount": 2,
+      "lastAccessed": 1773849542051,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-4-multi-candidate-ui-story.md",
+      "accessCount": 2,
+      "lastAccessed": 1773849559049,
+      "type": "file"
+    },
+    {
+      "path": "src",
+      "accessCount": 2,
+      "lastAccessed": 1773849730134,
+      "type": "directory"
+    },
+    {
+      "path": "rust-toolchain.toml",
+      "accessCount": 2,
+      "lastAccessed": 1773850522975,
+      "type": "file"
+    },
+    {
+      "path": "docs/prd/skills-intent-recognition-prd.md",
+      "accessCount": 1,
+      "lastAccessed": 1773846870611,
+      "type": "file"
+    },
+    {
+      "path": "docs/epics/EPIC-2026-003-skills-intent-recognition.md",
+      "accessCount": 1,
+      "lastAccessed": 1773846935954,
+      "type": "file"
+    },
+    {
+      "path": "docs/specs/2026-003-prd.md",
+      "accessCount": 1,
+      "lastAccessed": 1773847089081,
+      "type": "file"
+    },
+    {
+      "path": "docs/epic-2026-003-skills-intent-recognition.md",
+      "accessCount": 1,
+      "lastAccessed": 1773847134557,
+      "type": "file"
+    },
+    {
+      "path": "docs/epic-1-session-status-indicator.md",
+      "accessCount": 1,
+      "lastAccessed": 1773848289857,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-2-skill-parser-story.md",
+      "accessCount": 1,
+      "lastAccessed": 1773848897425,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-5-skill-executor-story.md",
+      "accessCount": 1,
+      "lastAccessed": 1773848967122,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-6-fallback-handler-story.md",
+      "accessCount": 1,
+      "lastAccessed": 1773849013950,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-7-fuzzy-match-optimization-story.md",
+      "accessCount": 1,
+      "lastAccessed": 1773849049236,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-8-e2e-test-story.md",
+      "accessCount": 1,
+      "lastAccessed": 1773849080256,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 1,
+      "lastAccessed": 1773849596097,
+      "type": "directory"
+    },
+    {
+      "path": "docs/prd/技能指令识别-prd.md",
+      "accessCount": 1,
+      "lastAccessed": 1773849623913,
+      "type": "file"
+    },
+    {
+      "path": "src/crates/core/src/agentic/tools/implementations/skill_tool.rs",
+      "accessCount": 1,
+      "lastAccessed": 1773849720402,
+      "type": "file"
+    },
+    {
+      "path": "src/crates/core/src/agentic/tools/implementations",
+      "accessCount": 1,
+      "lastAccessed": 1773849755575,
+      "type": "directory"
+    },
+    {
+      "path": "src/crates/core/src/agentic/tools/implementations/skills/mod.rs",
+      "accessCount": 1,
+      "lastAccessed": 1773849797879,
+      "type": "file"
+    },
+    {
+      "path": "Cargo.toml",
+      "accessCount": 1,
+      "lastAccessed": 1773850324297,
+      "type": "file"
+    }
+  ],
   "userDirectives": []
 }

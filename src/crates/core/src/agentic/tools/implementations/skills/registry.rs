@@ -177,6 +177,8 @@ impl SkillRegistry {
                                         path: path.to_string_lossy().to_string(),
                                         level,
                                         enabled: skill_data.enabled,
+                                        keywords: skill_data.keywords,
+                                        trigger_patterns: skill_data.trigger_patterns,
                                     };
                                     skills.push(info);
                                 }
