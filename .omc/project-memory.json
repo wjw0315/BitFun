@@ -250,21 +250,39 @@
   },
   "hotPaths": [
     {
+      "path": "src/crates/core/src/agentic/tools/implementations/skills/registry.rs",
+      "accessCount": 22,
+      "lastAccessed": 1773852922383,
+      "type": "file"
+    },
+    {
       "path": "src/crates/core/src/agentic/tools/implementations/skills/types.rs",
+      "accessCount": 9,
+      "lastAccessed": 1773852588408,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-2-skill-parser-story.md",
       "accessCount": 5,
-      "lastAccessed": 1773850274477,
+      "lastAccessed": 1773852650775,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-1-skills-scanner-story.md",
+      "accessCount": 5,
+      "lastAccessed": 1773852934765,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-3-keyword-matcher-story.md",
+      "accessCount": 5,
+      "lastAccessed": 1773853090393,
       "type": "file"
     },
     {
       "path": "docs/epics/3-技能指令识别-epic.md",
       "accessCount": 4,
       "lastAccessed": 1773849492211,
-      "type": "file"
-    },
-    {
-      "path": "src/crates/core/src/agentic/tools/implementations/skills/registry.rs",
-      "accessCount": 4,
-      "lastAccessed": 1773850295117,
       "type": "file"
     },
     {
@@ -286,18 +304,6 @@
       "type": "file"
     },
     {
-      "path": "docs/stories/3-1-skills-scanner-story.md",
-      "accessCount": 2,
-      "lastAccessed": 1773849534235,
-      "type": "file"
-    },
-    {
-      "path": "docs/stories/3-3-keyword-matcher-story.md",
-      "accessCount": 2,
-      "lastAccessed": 1773849542051,
-      "type": "file"
-    },
-    {
       "path": "docs/stories/3-4-multi-candidate-ui-story.md",
       "accessCount": 2,
       "lastAccessed": 1773849559049,
@@ -313,6 +319,12 @@
       "path": "rust-toolchain.toml",
       "accessCount": 2,
       "lastAccessed": 1773850522975,
+      "type": "file"
+    },
+    {
+      "path": "src/crates/core/src/agentic/tools/implementations/skills/mod.rs",
+      "accessCount": 2,
+      "lastAccessed": 1773853076749,
       "type": "file"
     },
     {
@@ -343,12 +355,6 @@
       "path": "docs/epic-1-session-status-indicator.md",
       "accessCount": 1,
       "lastAccessed": 1773848289857,
-      "type": "file"
-    },
-    {
-      "path": "docs/stories/3-2-skill-parser-story.md",
-      "accessCount": 1,
-      "lastAccessed": 1773848897425,
       "type": "file"
     },
     {
@@ -400,15 +406,21 @@
       "type": "directory"
     },
     {
-      "path": "src/crates/core/src/agentic/tools/implementations/skills/mod.rs",
-      "accessCount": 1,
-      "lastAccessed": 1773849797879,
-      "type": "file"
-    },
-    {
       "path": "Cargo.toml",
       "accessCount": 1,
       "lastAccessed": 1773850324297,
+      "type": "file"
+    },
+    {
+      "path": "docs/epics/3-engineering-review.md",
+      "accessCount": 1,
+      "lastAccessed": 1773852532192,
+      "type": "file"
+    },
+    {
+      "path": "src/crates/core/src/agentic/tools/implementations/skills/matcher.rs",
+      "accessCount": 1,
+      "lastAccessed": 1773853050995,
       "type": "file"
     }
   ],

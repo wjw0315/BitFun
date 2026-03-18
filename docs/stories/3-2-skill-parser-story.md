@@ -6,7 +6,7 @@
 |------|-----|
 | **Story ID** | 3.2 |
 | **Epic** | epic-3 |
-| **状态** | draft |
+| **状态** | done |
 | **故事点** | 2 |
 | **负责人** | @dev (Dex) |
 
@@ -20,9 +20,9 @@
 
 ## 验收标准
 
-- [ ] 定义技能文件格式规范（YAML frontmatter）
-- [ ] 解析器能正确提取 name, description, keywords
-- [ ] 支持 trigger_patterns 字段
+- [x] 定义技能文件格式规范（YAML frontmatter）
+- [x] 解析器能正确提取 name, description, keywords
+- [x] 支持 trigger_patterns 字段
 
 ---
 
@@ -56,8 +56,13 @@ category: patterns
 
 ## 技术要求
 
-- 语言: TypeScript/JavaScript
-- 依赖: js-yaml
+- 语言: Rust
+- 依赖: serde_yaml (已存在)
+
+## 实现文件
+
+- `src/crates/core/src/agentic/tools/implementations/skills/types.rs` - SkillData, SkillInfo 结构体扩展
+- `src/crates/core/src/agentic/tools/implementations/skills/registry.rs` - 解析逻辑更新
 
 ---
 

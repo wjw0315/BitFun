@@ -6,7 +6,7 @@
 |------|-----|
 | **Story ID** | 3.3 |
 | **Epic** | epic-3 |
-| **状态** | draft |
+| **状态** | done |
 | **故事点** | 5 |
 | **负责人** | @dev (Dex) |
 
@@ -20,10 +20,14 @@
 
 ## 验收标准
 
-- [ ] 输入 "python 排序" 正确匹配 python-patterns
-- [ ] 多关键词匹配支持
-- [ ] 匹配结果按相关度排序
-- [ ] 匹配阈值可配置
+- [x] 输入 "python 排序" 正确匹配 python-patterns
+- [x] 多关键词匹配支持
+- [x] 匹配结果按相关度排序
+- [x] 匹配阈值可配置
+
+## 实现文件
+
+- `src/crates/core/src/agentic/tools/implementations/skills/matcher.rs` - IntentMatcher 模块
 
 ---
 

@@ -6,7 +6,7 @@
 |------|-----|
 | **Story ID** | 3.1 |
 | **Epic** | epic-3 |
-| **状态** | draft |
+| **状态** | done |
 | **故事点** | 3 |
 | **负责人** | @dev (Dex) |
 
@@ -20,9 +20,13 @@
 
 ## 验收标准
 
-- [ ] 扫描 `.claude/skills` 目录返回正确元数据
-- [ ] 支持递归扫描子目录
-- [ ] 缓存扫描结果5分钟
+- [x] 扫描 `.claude/skills` 目录返回正确元数据
+- [x] 支持递归扫描子目录
+- [x] 缓存扫描结果5分钟
+
+## 实现文件
+
+- `src/crates/core/src/agentic/tools/implementations/skills/registry.rs` - SkillRegistry 添加 cache_timestamp 字段和 CACHE_DURATION (5分钟)
 
 ---
 

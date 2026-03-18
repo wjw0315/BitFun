@@ -12,6 +12,7 @@ use log::{debug, error};
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
+use std::time::{Duration, Instant};
 use tokio::fs;
 use tokio::sync::RwLock;
 
@@ -44,12 +45,27 @@ pub struct SkillDirEntry {
 /// Skill registry
 ///
 /// Caches scanned skill information to avoid repeated directory scanning
+/// Cache expires after 5 minutes
 pub struct SkillRegistry {
     /// Cached skill data, key is skill name
     cache: RwLock<HashMap<String, SkillInfo>>,
+    /// Cache timestamp for expiration tracking
+    cache_timestamp: RwLock<Option<Instant>>,
 }
 
 impl SkillRegistry {
+    /// Cache duration: 5 minutes
+    const CACHE_DURATION: Duration = Duration::from_secs(5 * 60);
+
+    fn is_cache_valid(&self) -> async -> bool {
+        let timestamp = self.cache_timestamp.read().await;
+        if let Some(ts) = *timestamp {
+            ts.elapsed() < Self::CACHE_DURATION
+        } else {
+            false
+        }
+    }
+
     fn get_possible_paths_for_workspace(workspace_root: Option<&Path>) -> Vec<SkillDirEntry> {
         let mut entries = Vec::new();
 
@@ -131,6 +147,7 @@ impl SkillRegistry {
     fn new() -> Self {
         Self {
             cache: RwLock::new(HashMap::new()),
+            cache_timestamp: RwLock::new(None),
         }
     }
 
@@ -213,6 +230,9 @@ impl SkillRegistry {
 
         let mut cache = self.cache.write().await;
         *cache = by_name;
+        // Update cache timestamp
+        let mut ts = self.cache_timestamp.write().await;
+        *ts = Some(Instant::now());
         debug!("SkillRegistry refreshed, {} skills loaded", cache.len());
     }
 
@@ -220,6 +240,9 @@ impl SkillRegistry {
         let by_name = self.scan_skill_map_for_workspace(workspace_root).await;
         let mut cache = self.cache.write().await;
         *cache = by_name;
+        // Update cache timestamp
+        let mut ts = self.cache_timestamp.write().await;
+        *ts = Some(Instant::now());
         debug!(
             "SkillRegistry refreshed for workspace, {} skills loaded",
             cache.len()
@@ -228,8 +251,13 @@ impl SkillRegistry {
 
     /// Ensure cache is initialized
     async fn ensure_loaded(&self) {
+        let is_valid = self.is_cache_valid().await;
         let cache = self.cache.read().await;
-        if cache.is_empty() {
+        if cache.is_empty() || !is_valid {
+            drop(cache);
+            self.refresh().await;
+        }
+    }
             drop(cache);
             self.refresh().await;
         }

@@ -3,9 +3,11 @@
 //! Provides Skill registry, loading, and configuration management functionality
 
 pub mod builtin;
+pub mod matcher;
 pub mod registry;
 pub mod types;
 
+pub use matcher::{IntentMatcher, MatchResult, MatchType, MatcherConfig};
 pub use registry::SkillRegistry;
 pub use types::{SkillData, SkillInfo, SkillLocation};
 
