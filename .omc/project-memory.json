@@ -1,0 +1,253 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1773846249952,
+  "projectRoot": "/Users/jiaweiwu/baidu_backup/macm1air/work/own/project/BitFun-1",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": ">=18.0.0",
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "Rust",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "Cargo.toml"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "vite",
+        "version": "7.0.4",
+        "category": "build"
+      },
+      {
+        "name": "axum",
+        "version": null,
+        "category": "backend"
+      }
+    ],
+    "packageManager": "pnpm",
+    "runtime": "Node.js 18.0.0"
+  },
+  "build": {
+    "buildCommand": "pnpm build",
+    "testCommand": "cargo test",
+    "lintCommand": "cargo clippy",
+    "devCommand": "pnpm dev",
+    "scripts": {
+      "copy-monaco": "copyfiles -u 5 \"src/web-ui/node_modules/monaco-editor/min/vs/**/*\" src/web-ui/public/monaco-editor",
+      "copy-icons": "copyfiles -f \"src/apps/desktop/icons/Logo-ICON.png\" \"src/web-ui/public/\"",
+      "copy-assets": "pnpm run copy-monaco && pnpm run copy-icons",
+      "generate-version": "node scripts/generate-version.cjs",
+      "generate-all": "pnpm run generate-version",
+      "postinstall": "pnpm run copy-assets",
+      "dev": "node scripts/dev.cjs web",
+      "dev:web": "pnpm --dir src/web-ui dev",
+      "prebuild": "pnpm run prebuild:web",
+      "prebuild:web": "pnpm run copy-assets --silent && pnpm run generate-all --silent",
+      "type-check:web": "pnpm --dir src/web-ui run type-check",
+      "build": "pnpm run build:web",
+      "verify:monaco-assets": "node scripts/verify-monaco-assets.cjs",
+      "build:web": "pnpm run type-check:web && pnpm --dir src/web-ui build && pnpm run verify:monaco-assets",
+      "build:mobile-web": "pnpm --dir src/mobile-web build",
+      "prepare:mobile-web": "node scripts/mobile-web-build.cjs",
+      "preview": "pnpm --dir src/web-ui preview",
+      "desktop:dev": "node scripts/dev.cjs desktop",
+      "desktop:dev:raw": "cross-env-shell CI=true \"cd src/apps/desktop && tauri dev\"",
+      "desktop:build": "cross-env-shell CI=true \"cd src/apps/desktop && tauri build\"",
+      "desktop:build:fast": "cross-env-shell CI=true \"cd src/apps/desktop && tauri build --debug --no-bundle\"",
+      "desktop:build:release-fast": "cross-env-shell CI=true \"cd src/apps/desktop && tauri build --no-bundle -- --profile release-fast\"",
+      "desktop:build:exe": "cross-env-shell CI=true \"cd src/apps/desktop && tauri build --no-bundle\"",
+      "desktop:build:nsis": "cross-env-shell CI=true \"cd src/apps/desktop && tauri build --bundles nsis\"",
+      "desktop:build:arm64": "cross-env-shell CI=true \"cd src/apps/desktop && tauri build --target aarch64-apple-darwin --bundles dmg\"",
+      "desktop:build:x86_64": "cross-env-shell CI=true \"cd src/apps/desktop && tauri build --target x86_64-apple-darwin --bundles dmg\"",
+      "installer:build": "pnpm --dir BitFun-Installer run installer:build",
+      "installer:build:fast": "pnpm --dir BitFun-Installer run installer:build:fast",
+      "installer:build:only": "pnpm --dir BitFun-Installer run installer:build:only",
+      "installer:build:only:fast": "pnpm --dir BitFun-Installer run installer:build:only:fast",
+      "installer:dev": "pnpm --dir BitFun-Installer run installer:dev",
+      "cli:dev": "cd src/apps/cli && cargo run --",
+      "cli:build": "cd src/apps/cli && cargo build --release",
+      "cli:run": "cd src/apps/cli && cargo run --release --",
+      "cli:exec": "cd src/apps/cli && cargo run -- exec",
+      "cli:check": "cd src/apps/cli && cargo check",
+      "cli:test": "cd src/apps/cli && cargo test",
+      "preview-components": "pnpm --dir src/web-ui exec vite --config vite.config.preview.ts",
+      "build-components": "pnpm --dir src/web-ui exec vite build --config vite.config.preview.ts",
+      "website:dev": "pnpm --dir website run dev",
+      "website:build": "pnpm --dir website run build",
+      "website:preview": "pnpm --dir website run preview",
+      "website:install": "pnpm --dir website install",
+      "e2e:install": "pnpm --dir tests/e2e install",
+      "e2e:test": "pnpm --dir tests/e2e test",
+      "e2e:test:l0": "pnpm --dir tests/e2e run test:l0",
+      "e2e:test:l0:all": "pnpm --dir tests/e2e run test:l0:all",
+      "e2e:test:l1": "pnpm --dir tests/e2e run test:l1",
+      "e2e:test:smoke": "pnpm --dir tests/e2e run test:smoke",
+      "e2e:test:chat": "pnpm --dir tests/e2e run test:chat"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": true,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "scripts",
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "BitFun-Installer": {
+      "path": "BitFun-Installer",
+      "purpose": null,
+      "fileCount": 8,
+      "lastAccessed": 1773846249929,
+      "keyFiles": [
+        "README.md",
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "tsconfig.json"
+      ]
+    },
+    "MiniApp": {
+      "path": "MiniApp",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1773846249929,
+      "keyFiles": []
+    },
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 8,
+      "lastAccessed": 1773846249942,
+      "keyFiles": [
+        "BitFun-Logo.png",
+        "Logo-ICON.png",
+        "index.html",
+        "panda_1.png",
+        "panda_2.png"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 2,
+      "lastAccessed": 1773846249942,
+      "keyFiles": [
+        "epic-1-session-status-indicator.md",
+        "naming-conventions.md"
+      ]
+    },
+    "png": {
+      "path": "png",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1773846249942,
+      "keyFiles": [
+        "BitFun-Logo.png",
+        "BitFun_title.png",
+        "first_screen_screenshot-zh-CN.png",
+        "first_screen_screenshot.png"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 5,
+      "lastAccessed": 1773846249942,
+      "keyFiles": [
+        "console-style.cjs",
+        "dev.cjs",
+        "generate-version.cjs",
+        "mobile-web-build.cjs",
+        "verify-monaco-assets.cjs"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1773846249943,
+      "keyFiles": []
+    },
+    "target": {
+      "path": "target",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1773846249943,
+      "keyFiles": [
+        "CACHEDIR.TAG"
+      ]
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 0,
+      "lastAccessed": 1773846249943,
+      "keyFiles": []
+    },
+    "BitFun-Installer/node_modules": {
+      "path": "BitFun-Installer/node_modules",
+      "purpose": "Dependencies",
+      "fileCount": 0,
+      "lastAccessed": 1773846249944,
+      "keyFiles": []
+    },
+    "BitFun-Installer/scripts": {
+      "path": "BitFun-Installer/scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 3,
+      "lastAccessed": 1773846249945,
+      "keyFiles": [
+        "build-installer.cjs",
+        "sync-model-i18n.cjs",
+        "sync-theme-i18n.cjs"
+      ]
+    },
+    "BitFun-Installer/src": {
+      "path": "BitFun-Installer/src",
+      "purpose": "Source code",
+      "fileCount": 4,
+      "lastAccessed": 1773846249946,
+      "keyFiles": [
+        "App.tsx",
+        "Logo-ICON.png",
+        "main.tsx"
+      ]
+    },
+    "dist/assets": {
+      "path": "dist/assets",
+      "purpose": "Static assets",
+      "fileCount": 286,
+      "lastAccessed": 1773846249948,
+      "keyFiles": [
+        "AIRulesMemoryConfig-DaDtyxse.css",
+        "AIRulesMemoryConfig-ykTUXG1M.js",
+        "AgentsScene-RDARPSQO.js"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}

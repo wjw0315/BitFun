@@ -48,7 +48,6 @@ src-tauri/gen/
 .vscode/*
 !.vscode/extensions.json
 .idea
-.claude
 .DS_Store
 *.suo
 *.ntvs*
@@ -87,10 +86,7 @@ Thumbs.db
 *.swp
 
 # AIOS Local (AIOS)
-.aios-core/local/
-.claude/settings.local.json
 .aios/install-log.txt
-/.aios-core
 /.antigravity
 /.codex
 /.gemini
