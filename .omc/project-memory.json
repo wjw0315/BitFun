@@ -251,14 +251,20 @@
   "hotPaths": [
     {
       "path": "src/crates/core/src/agentic/tools/implementations/skills/registry.rs",
-      "accessCount": 22,
-      "lastAccessed": 1773852922383,
+      "accessCount": 24,
+      "lastAccessed": 1773853527619,
       "type": "file"
     },
     {
       "path": "src/crates/core/src/agentic/tools/implementations/skills/types.rs",
       "accessCount": 9,
       "lastAccessed": 1773852588408,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-5-skill-executor-story.md",
+      "accessCount": 6,
+      "lastAccessed": 1773853465647,
       "type": "file"
     },
     {
@@ -280,6 +286,24 @@
       "type": "file"
     },
     {
+      "path": "src/crates/core/src/agentic/tools/implementations/mod.rs",
+      "accessCount": 5,
+      "lastAccessed": 1773853278346,
+      "type": "directory"
+    },
+    {
+      "path": "docs/stories/3-6-fallback-handler-story.md",
+      "accessCount": 5,
+      "lastAccessed": 1773853556205,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-7-fuzzy-match-optimization-story.md",
+      "accessCount": 5,
+      "lastAccessed": 1773853624164,
+      "type": "file"
+    },
+    {
       "path": "docs/epics/3-技能指令识别-epic.md",
       "accessCount": 4,
       "lastAccessed": 1773849492211,
@@ -292,6 +316,24 @@
       "type": "file"
     },
     {
+      "path": "src/crates/core/src/agentic/tools/registry.rs",
+      "accessCount": 3,
+      "lastAccessed": 1773853316095,
+      "type": "directory"
+    },
+    {
+      "path": "docs/stories/3-4-multi-candidate-ui-story.md",
+      "accessCount": 3,
+      "lastAccessed": 1773853414854,
+      "type": "file"
+    },
+    {
+      "path": "src/crates/core/src/agentic/tools/implementations/skill_matcher_tool.rs",
+      "accessCount": 3,
+      "lastAccessed": 1773853515658,
+      "type": "file"
+    },
+    {
       "path": "docs/naming-conventions.md",
       "accessCount": 2,
       "lastAccessed": 1773848572943,
@@ -301,12 +343,6 @@
       "path": "docs/epics/3-skills-intent-recognition-epic.md",
       "accessCount": 2,
       "lastAccessed": 1773848607824,
-      "type": "file"
-    },
-    {
-      "path": "docs/stories/3-4-multi-candidate-ui-story.md",
-      "accessCount": 2,
-      "lastAccessed": 1773849559049,
       "type": "file"
     },
     {
@@ -325,6 +361,18 @@
       "path": "src/crates/core/src/agentic/tools/implementations/skills/mod.rs",
       "accessCount": 2,
       "lastAccessed": 1773853076749,
+      "type": "file"
+    },
+    {
+      "path": "src/crates/core/src/agentic/tools/implementations/skills/matcher.rs",
+      "accessCount": 2,
+      "lastAccessed": 1773853562097,
+      "type": "file"
+    },
+    {
+      "path": "docs/stories/3-8-e2e-test-story.md",
+      "accessCount": 2,
+      "lastAccessed": 1773853628487,
       "type": "file"
     },
     {
@@ -355,30 +403,6 @@
       "path": "docs/epic-1-session-status-indicator.md",
       "accessCount": 1,
       "lastAccessed": 1773848289857,
-      "type": "file"
-    },
-    {
-      "path": "docs/stories/3-5-skill-executor-story.md",
-      "accessCount": 1,
-      "lastAccessed": 1773848967122,
-      "type": "file"
-    },
-    {
-      "path": "docs/stories/3-6-fallback-handler-story.md",
-      "accessCount": 1,
-      "lastAccessed": 1773849013950,
-      "type": "file"
-    },
-    {
-      "path": "docs/stories/3-7-fuzzy-match-optimization-story.md",
-      "accessCount": 1,
-      "lastAccessed": 1773849049236,
-      "type": "file"
-    },
-    {
-      "path": "docs/stories/3-8-e2e-test-story.md",
-      "accessCount": 1,
-      "lastAccessed": 1773849080256,
       "type": "file"
     },
     {
@@ -418,10 +442,10 @@
       "type": "file"
     },
     {
-      "path": "src/crates/core/src/agentic/tools/implementations/skills/matcher.rs",
+      "path": "src/crates/core/src/agentic/tools",
       "accessCount": 1,
-      "lastAccessed": 1773853050995,
-      "type": "file"
+      "lastAccessed": 1773853284127,
+      "type": "directory"
     }
   ],
   "userDirectives": []

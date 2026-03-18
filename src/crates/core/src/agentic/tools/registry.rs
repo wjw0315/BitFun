@@ -106,6 +106,9 @@ impl ToolRegistry {
         // Skill tool
         self.register_tool(Arc::new(SkillTool::new()));
 
+        // Skill Matcher tool (intent recognition)
+        self.register_tool(Arc::new(SkillMatcherTool::new()));
+
         // AskUserQuestion tool
         self.register_tool(Arc::new(AskUserQuestionTool::new()));
 
