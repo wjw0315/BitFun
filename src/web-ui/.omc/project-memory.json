@@ -1,0 +1,128 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1773909794862,
+  "projectRoot": "/Users/jiaweiwu/baidu_backup/macm1pro/work/project/BitFun-1/src/web-ui",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "react",
+        "version": "18.3.1",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "18.3.1",
+        "category": "frontend"
+      },
+      {
+        "name": "vite",
+        "version": "7.0.4",
+        "category": "build"
+      },
+      {
+        "name": "vitest",
+        "version": "4.1.0",
+        "category": "testing"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": "npm test",
+    "lintCommand": null,
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "build:desktop": "vite build --mode desktop",
+      "build:web": "vite build --mode web",
+      "preview": "vite preview",
+      "type-check": "tsc --noEmit",
+      "test": "vitest",
+      "test:run": "vitest run"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": "feature-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "public",
+      "src"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 6,
+      "lastAccessed": 1773909794833,
+      "keyFiles": [
+        "BitFun-Logo.png",
+        "Logo-ICON.png",
+        "panda_1.png",
+        "panda_2.png",
+        "panda_full_1.png"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 2,
+      "lastAccessed": 1773909794833,
+      "keyFiles": [
+        "main.tsx",
+        "vite-env.d.ts"
+      ]
+    },
+    "src/app": {
+      "path": "src/app",
+      "purpose": "Application code",
+      "fileCount": 2,
+      "lastAccessed": 1773909794841,
+      "keyFiles": [
+        "App.tsx",
+        "index.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/flow_chat/components/ChatInput.tsx",
+      "accessCount": 13,
+      "lastAccessed": 1773910513801,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

@@ -732,13 +732,20 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       }
 
       // When idle, keep the picker for mode switching, but don't interfere with /btw being a real command.
+      // Only show picker when there's no whitespace after the first token - if user has typed
+      // content after the command (e.g., "/review hello"), close picker so Enter can send the message.
       if (!isBtwCommand) {
-        setSlashCommandState({
-          isActive: true,
-          kind: 'all',
-          query,
-          selectedIndex: 0,
-        });
+        if (!hasWhitespace) {
+          setSlashCommandState({
+            isActive: true,
+            kind: 'all',
+            query,
+            selectedIndex: 0,
+          });
+        } else if (slashCommandState.isActive) {
+          // User has typed content after the command - close picker so they can send the message
+          setSlashCommandState({ isActive: false, kind: 'modes', query: '', selectedIndex: 0 });
+        }
         return;
       }
     }
