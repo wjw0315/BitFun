@@ -608,6 +608,24 @@
       "loadSkillFailed": "Load skill failed",
       "skillAction": "Skill:"
     },
+    "skillMatcher": {
+      "title": "Skill Match",
+      "analyzing": "Analyzing intent...",
+      "yourInput": "Your input",
+      "candidates": "{{count}} candidate skills",
+      "bestMatch": "Best match",
+      "execute": "Execute",
+      "cancel": "Cancel",
+      "continueConversation": "Continue conversation",
+      "selected": "Selected",
+      "completed": "Completed",
+      "noMatch": "No matching skill found",
+      "noMatchHint": "Continuing with normal conversation",
+      "keyboardHint": "Press 1-5 to quick select, Enter to confirm, Esc to cancel",
+      "matchTypeKeyword": "Keyword",
+      "matchTypeTrigger": "Trigger",
+      "matchTypeDescription": "Description"
+    },
     "readFile": {
       "parsingParams": "Parsing parameters...",
       "noFileSpecified": "No file specified",

@@ -61,6 +61,15 @@ Returns match results with confidence scores."#.to_string(),
                     "type": "boolean",
                     "description": "Automatically execute matched skill (default: false)",
                     "default": false
+                },
+                "selected_skill": {
+                    "type": "string",
+                    "description": "Skill name to execute (when user selects from candidates)"
+                },
+                "cancel": {
+                    "type": "boolean",
+                    "description": "Cancel skill matching and continue with normal conversation",
+                    "default": false
                 }
             },
             "required": ["input"],
@@ -128,6 +137,53 @@ Returns match results with confidence scores."#.to_string(),
             .get("auto_execute")
             .and_then(|v| v.as_bool())
             .unwrap_or(false);
+
+        // Handle user selected skill from UI
+        let selected_skill = input
+            .get("selected_skill")
+            .and_then(|v| v.as_str());
+
+        // Handle cancel request
+        let cancel = input
+            .get("cancel")
+            .and_then(|v| v.as_bool())
+            .unwrap_or(false);
+
+        // If cancel is true, return cancel response
+        if cancel {
+            return Ok(vec![ToolResult::Result {
+                data: json!({
+                    "cancelled": true,
+                    "message": "Skill matching cancelled"
+                }),
+                result_for_assistant: Some("Skill matching cancelled. Continuing with normal conversation...".to_string()),
+            }]);
+        }
+
+        // If user selected a skill, execute it directly
+        if let Some(skill_name) = selected_skill {
+            debug!("Executing user-selected skill: {}", skill_name);
+            let registry = get_skill_registry();
+            let skill_data = registry
+                .find_and_load_skill_for_workspace(skill_name, context.workspace_root())
+                .await?;
+
+            return Ok(vec![ToolResult::Result {
+                data: json!({
+                    "matched": true,
+                    "skill_name": skill_name,
+                    "confidence": 1.0,
+                    "match_type": "UserSelected",
+                    "auto_executed": true,
+                    "skill_content": skill_data.content
+                }),
+                result_for_assistant: Some(format!(
+                    "Executing skill '{}' as selected by user.\n\n{}",
+                    skill_name,
+                    skill_data.content
+                )),
+            }]);
+        }
 
         debug!("SkillMatcher matching input: {}", user_input);
 
@@ -205,7 +261,7 @@ Returns match results with confidence scores."#.to_string(),
                 "input": user_input
             }),
             result_for_assistant: Some(format!(
-                "Found {} matching skill(s). Best match: '{}' (confidence: {:.0}%)\n\nUse auto_execute: true to execute, or continue conversation.".to_string(),
+                "Found {} matching skill(s). Best match: '{}' (confidence: {:.0}%)\n\nUse auto_execute: true to execute, or continue conversation.",
                 matches.len(),
                 skill_name,
                 best_match.confidence * 100.0

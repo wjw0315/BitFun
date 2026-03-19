@@ -1,5 +1,0 @@
-{"t":0,"agent":"system","event":"skill_invoked","skill_name":"design-review"}
-{"t":0,"agent":"a0704ee","agent_type":"unknown","event":"agent_stop","success":true}
-{"t":0,"agent":"af674e8","agent_type":"unknown","event":"agent_stop","success":true}
-{"t":0,"agent":"system","event":"skill_invoked","skill_name":"plan-design-review"}
-{"t":0,"agent":"af74dc6","agent_type":"unknown","event":"agent_stop","success":true}

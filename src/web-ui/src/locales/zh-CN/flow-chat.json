@@ -602,6 +602,24 @@
       "loadSkillFailed": "加载技能失败",
       "skillAction": "Skill技能:"
     },
+    "skillMatcher": {
+      "title": "技能匹配",
+      "analyzing": "正在分析意图...",
+      "yourInput": "你的输入",
+      "candidates": "{{count}} 个候选技能",
+      "bestMatch": "最佳匹配",
+      "execute": "执行",
+      "cancel": "取消",
+      "continueConversation": "继续对话",
+      "selected": "已选择",
+      "completed": "已完成",
+      "noMatch": "未找到匹配的技能",
+      "noMatchHint": "将继续普通对话流程",
+      "keyboardHint": "按 1-5 快速选择，按 Enter 确认，按 Esc 取消",
+      "matchTypeKeyword": "关键词",
+      "matchTypeTrigger": "触发词",
+      "matchTypeDescription": "描述相似"
+    },
     "readFile": {
       "parsingParams": "解析参数中...",
       "noFileSpecified": "未指定文件",

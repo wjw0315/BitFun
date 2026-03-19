@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1773846249952,
-  "projectRoot": "/Users/jiaweiwu/baidu_backup/macm1air/work/own/project/BitFun-1",
+  "lastScanned": 1773827948465,
+  "projectRoot": "/Users/jiaweiwu/baidu_backup/macm1pro/work/project/BitFun-1",
   "techStack": {
     "languages": [
       {
@@ -120,7 +120,7 @@
       "path": "BitFun-Installer",
       "purpose": null,
       "fileCount": 8,
-      "lastAccessed": 1773846249929,
+      "lastAccessed": 1773827948389,
       "keyFiles": [
         "README.md",
         "index.html",
@@ -133,14 +133,14 @@
       "path": "MiniApp",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1773846249929,
+      "lastAccessed": 1773827948389,
       "keyFiles": []
     },
     "dist": {
       "path": "dist",
       "purpose": "Distribution/build output",
-      "fileCount": 8,
-      "lastAccessed": 1773846249942,
+      "fileCount": 7,
+      "lastAccessed": 1773827948390,
       "keyFiles": [
         "BitFun-Logo.png",
         "Logo-ICON.png",
@@ -152,8 +152,8 @@
     "docs": {
       "path": "docs",
       "purpose": "Documentation",
-      "fileCount": 2,
-      "lastAccessed": 1773846249942,
+      "fileCount": 3,
+      "lastAccessed": 1773827948402,
       "keyFiles": [
         "epic-1-session-status-indicator.md",
         "naming-conventions.md"
@@ -163,7 +163,7 @@
       "path": "png",
       "purpose": null,
       "fileCount": 4,
-      "lastAccessed": 1773846249942,
+      "lastAccessed": 1773827948406,
       "keyFiles": [
         "BitFun-Logo.png",
         "BitFun_title.png",
@@ -175,7 +175,7 @@
       "path": "scripts",
       "purpose": "Build/utility scripts",
       "fileCount": 5,
-      "lastAccessed": 1773846249942,
+      "lastAccessed": 1773827948412,
       "keyFiles": [
         "console-style.cjs",
         "dev.cjs",
@@ -188,14 +188,14 @@
       "path": "src",
       "purpose": "Source code",
       "fileCount": 0,
-      "lastAccessed": 1773846249943,
+      "lastAccessed": 1773827948415,
       "keyFiles": []
     },
     "target": {
       "path": "target",
       "purpose": null,
       "fileCount": 2,
-      "lastAccessed": 1773846249943,
+      "lastAccessed": 1773827948422,
       "keyFiles": [
         "CACHEDIR.TAG"
       ]
@@ -204,21 +204,21 @@
       "path": "tests",
       "purpose": "Test files",
       "fileCount": 0,
-      "lastAccessed": 1773846249943,
+      "lastAccessed": 1773827948424,
       "keyFiles": []
     },
     "BitFun-Installer/node_modules": {
       "path": "BitFun-Installer/node_modules",
       "purpose": "Dependencies",
       "fileCount": 0,
-      "lastAccessed": 1773846249944,
+      "lastAccessed": 1773827948452,
       "keyFiles": []
     },
     "BitFun-Installer/scripts": {
       "path": "BitFun-Installer/scripts",
       "purpose": "Build/utility scripts",
       "fileCount": 3,
-      "lastAccessed": 1773846249945,
+      "lastAccessed": 1773827948460,
       "keyFiles": [
         "build-installer.cjs",
         "sync-model-i18n.cjs",
@@ -229,7 +229,7 @@
       "path": "BitFun-Installer/src",
       "purpose": "Source code",
       "fileCount": 4,
-      "lastAccessed": 1773846249946,
+      "lastAccessed": 1773827948461,
       "keyFiles": [
         "App.tsx",
         "Logo-ICON.png",
@@ -239,212 +239,176 @@
     "dist/assets": {
       "path": "dist/assets",
       "purpose": "Static assets",
-      "fileCount": 286,
-      "lastAccessed": 1773846249948,
+      "fileCount": 288,
+      "lastAccessed": 1773827948464,
       "keyFiles": [
+        "AIRulesMemoryConfig-Cp_l3s-R.js",
         "AIRulesMemoryConfig-DaDtyxse.css",
-        "AIRulesMemoryConfig-ykTUXG1M.js",
-        "AgentsScene-RDARPSQO.js"
+        "AgentsScene-D_Ud5il9.js"
       ]
     }
   },
   "hotPaths": [
     {
-      "path": "src/crates/core/src/agentic/tools/implementations/skills/registry.rs",
-      "accessCount": 24,
-      "lastAccessed": 1773853527619,
-      "type": "file"
-    },
-    {
-      "path": "src/crates/core/src/agentic/tools/implementations/skills/types.rs",
-      "accessCount": 9,
-      "lastAccessed": 1773852588408,
-      "type": "file"
-    },
-    {
-      "path": "docs/stories/3-5-skill-executor-story.md",
-      "accessCount": 6,
-      "lastAccessed": 1773853465647,
-      "type": "file"
-    },
-    {
-      "path": "docs/stories/3-2-skill-parser-story.md",
+      "path": "src/web-ui/src/flow_chat/components/ChatInput.tsx",
       "accessCount": 5,
-      "lastAccessed": 1773852650775,
+      "lastAccessed": 1773906595952,
       "type": "file"
     },
     {
-      "path": "docs/stories/3-1-skills-scanner-story.md",
-      "accessCount": 5,
-      "lastAccessed": 1773852934765,
-      "type": "file"
-    },
-    {
-      "path": "docs/stories/3-3-keyword-matcher-story.md",
-      "accessCount": 5,
-      "lastAccessed": 1773853090393,
-      "type": "file"
-    },
-    {
-      "path": "src/crates/core/src/agentic/tools/implementations/mod.rs",
-      "accessCount": 5,
-      "lastAccessed": 1773853278346,
-      "type": "directory"
-    },
-    {
-      "path": "docs/stories/3-6-fallback-handler-story.md",
-      "accessCount": 5,
-      "lastAccessed": 1773853556205,
-      "type": "file"
-    },
-    {
-      "path": "docs/stories/3-7-fuzzy-match-optimization-story.md",
-      "accessCount": 5,
-      "lastAccessed": 1773853624164,
-      "type": "file"
-    },
-    {
-      "path": "docs/epics/3-技能指令识别-epic.md",
+      "path": "src/web-ui/src/flow_chat/tool-cards/index.ts",
       "accessCount": 4,
-      "lastAccessed": 1773849492211,
+      "lastAccessed": 1773885334321,
       "type": "file"
     },
     {
-      "path": "docs/epics/epic-3-skills-intent-recognition.md",
-      "accessCount": 3,
-      "lastAccessed": 1773848373326,
+      "path": "src/web-ui/src/locales/zh-CN/flow-chat.json",
+      "accessCount": 4,
+      "lastAccessed": 1773885374881,
       "type": "file"
     },
     {
-      "path": "src/crates/core/src/agentic/tools/registry.rs",
+      "path": "src/web-ui/src/flow_chat",
       "accessCount": 3,
-      "lastAccessed": 1773853316095,
+      "lastAccessed": 1773885163765,
       "type": "directory"
     },
     {
-      "path": "docs/stories/3-4-multi-candidate-ui-story.md",
+      "path": "src/web-ui/src/locales/en-US/flow-chat.json",
       "accessCount": 3,
-      "lastAccessed": 1773853414854,
-      "type": "file"
-    },
-    {
-      "path": "src/crates/core/src/agentic/tools/implementations/skill_matcher_tool.rs",
-      "accessCount": 3,
-      "lastAccessed": 1773853515658,
-      "type": "file"
-    },
-    {
-      "path": "docs/naming-conventions.md",
-      "accessCount": 2,
-      "lastAccessed": 1773848572943,
-      "type": "file"
-    },
-    {
-      "path": "docs/epics/3-skills-intent-recognition-epic.md",
-      "accessCount": 2,
-      "lastAccessed": 1773848607824,
-      "type": "file"
-    },
-    {
-      "path": "src",
-      "accessCount": 2,
-      "lastAccessed": 1773849730134,
+      "lastAccessed": 1773885397293,
       "type": "directory"
     },
     {
-      "path": "rust-toolchain.toml",
-      "accessCount": 2,
-      "lastAccessed": 1773850522975,
-      "type": "file"
-    },
-    {
-      "path": "src/crates/core/src/agentic/tools/implementations/skills/mod.rs",
-      "accessCount": 2,
-      "lastAccessed": 1773853076749,
-      "type": "file"
-    },
-    {
-      "path": "src/crates/core/src/agentic/tools/implementations/skills/matcher.rs",
-      "accessCount": 2,
-      "lastAccessed": 1773853562097,
+      "path": "src/web-ui/src/flow_chat/tool-cards/SkillMatcherDisplay.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1773889664817,
       "type": "file"
     },
     {
       "path": "docs/stories/3-8-e2e-test-story.md",
       "accessCount": 2,
-      "lastAccessed": 1773853628487,
+      "lastAccessed": 1773886742838,
       "type": "file"
     },
     {
-      "path": "docs/prd/skills-intent-recognition-prd.md",
-      "accessCount": 1,
-      "lastAccessed": 1773846870611,
+      "path": ".claude/skills/review/checklist.md",
+      "accessCount": 2,
+      "lastAccessed": 1773889645894,
       "type": "file"
     },
     {
-      "path": "docs/epics/EPIC-2026-003-skills-intent-recognition.md",
+      "path": "docs/stories/3-3-keyword-matcher-story.md",
       "accessCount": 1,
-      "lastAccessed": 1773846935954,
+      "lastAccessed": 1773884809775,
       "type": "file"
     },
     {
-      "path": "docs/specs/2026-003-prd.md",
+      "path": "docs/stories/3-2-skill-parser-story.md",
       "accessCount": 1,
-      "lastAccessed": 1773847089081,
+      "lastAccessed": 1773884809896,
       "type": "file"
     },
     {
-      "path": "docs/epic-2026-003-skills-intent-recognition.md",
+      "path": "docs/stories/3-1-skills-scanner-story.md",
       "accessCount": 1,
-      "lastAccessed": 1773847134557,
+      "lastAccessed": 1773884809999,
       "type": "file"
     },
     {
-      "path": "docs/epic-1-session-status-indicator.md",
+      "path": "docs/stories/3-6-fallback-handler-story.md",
       "accessCount": 1,
-      "lastAccessed": 1773848289857,
+      "lastAccessed": 1773884825621,
       "type": "file"
     },
     {
-      "path": "",
+      "path": "docs/stories/3-5-skill-executor-story.md",
       "accessCount": 1,
-      "lastAccessed": 1773849596097,
-      "type": "directory"
-    },
-    {
-      "path": "docs/prd/技能指令识别-prd.md",
-      "accessCount": 1,
-      "lastAccessed": 1773849623913,
+      "lastAccessed": 1773884825678,
       "type": "file"
     },
     {
-      "path": "src/crates/core/src/agentic/tools/implementations/skill_tool.rs",
+      "path": "docs/stories/3-4-multi-candidate-ui-story.md",
       "accessCount": 1,
-      "lastAccessed": 1773849720402,
+      "lastAccessed": 1773884825733,
       "type": "file"
     },
     {
-      "path": "src/crates/core/src/agentic/tools/implementations",
+      "path": "docs/stories/3-7-fuzzy-match-optimization-story.md",
       "accessCount": 1,
-      "lastAccessed": 1773849755575,
-      "type": "directory"
-    },
-    {
-      "path": "Cargo.toml",
-      "accessCount": 1,
-      "lastAccessed": 1773850324297,
+      "lastAccessed": 1773884834088,
       "type": "file"
     },
     {
       "path": "docs/epics/3-engineering-review.md",
       "accessCount": 1,
-      "lastAccessed": 1773852532192,
+      "lastAccessed": 1773885023031,
       "type": "file"
     },
     {
-      "path": "src/crates/core/src/agentic/tools",
+      "path": "src/crates/core/src/agentic/tools/implementations/skills/types.rs",
       "accessCount": 1,
-      "lastAccessed": 1773853284127,
+      "lastAccessed": 1773885087062,
+      "type": "file"
+    },
+    {
+      "path": "src/crates/core/src/agentic/tools/implementations/skills/matcher.rs",
+      "accessCount": 1,
+      "lastAccessed": 1773885087112,
+      "type": "file"
+    },
+    {
+      "path": "src",
+      "accessCount": 1,
+      "lastAccessed": 1773885095263,
+      "type": "directory"
+    },
+    {
+      "path": "src/crates/core/src/agentic/tools/implementations/skill_matcher_tool.rs",
+      "accessCount": 1,
+      "lastAccessed": 1773885101003,
+      "type": "file"
+    },
+    {
+      "path": "src/web-ui/src",
+      "accessCount": 1,
+      "lastAccessed": 1773885115587,
+      "type": "directory"
+    },
+    {
+      "path": "src/web-ui/src/flow_chat/services/flow-chat-manager/EventHandlerModule.ts",
+      "accessCount": 1,
+      "lastAccessed": 1773885149746,
+      "type": "file"
+    },
+    {
+      "path": "src/web-ui/src/flow_chat/tool-cards/SkillDisplay.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1773885171871,
+      "type": "file"
+    },
+    {
+      "path": "src/web-ui/src/flow_chat/tool-cards/AskUserQuestionCard.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1773885200968,
+      "type": "file"
+    },
+    {
+      "path": "src/web-ui/src/flow_chat/tool-cards/SkillMatcherDisplay.scss",
+      "accessCount": 1,
+      "lastAccessed": 1773885308636,
+      "type": "file"
+    },
+    {
+      "path": "src/web-ui/src/locales",
+      "accessCount": 1,
+      "lastAccessed": 1773885339003,
+      "type": "directory"
+    },
+    {
+      "path": "src/crates/core/src",
+      "accessCount": 1,
+      "lastAccessed": 1773886756165,
       "type": "directory"
     }
   ],

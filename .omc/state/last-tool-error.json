@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"rustup show\"}",
-  "error": "Exit code 1\nDefault host: aarch64-apple-darwin\nrustup home:  /Users/jiaweiwu/.rustup\n\nerror: Missing manifest in toolchain '1.88.0-aarch64-apple-darwin'",
-  "timestamp": "2026-03-18T16:15:52.929Z",
-  "retry_count": 1
-}

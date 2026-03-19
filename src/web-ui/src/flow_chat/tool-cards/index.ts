@@ -25,6 +25,7 @@ import { ImageAnalysisCard } from './ImageAnalysisCard';
 import { ContextCompressionDisplay } from './ContextCompressionDisplay';
 import { MCPToolDisplay } from './MCPToolDisplay';
 import { SkillDisplay } from './SkillDisplay';
+import { SkillMatcherDisplay } from './SkillMatcherDisplay';
 import { AskUserQuestionCard } from './AskUserQuestionCard';
 import { GitToolDisplay } from './GitToolDisplay';
 import { GetFileDiffDisplay } from './GetFileDiffDisplay';
@@ -228,6 +229,18 @@ export const TOOL_CARD_CONFIGS: Record<string, ToolCardConfig> = {
     primaryColor: '#8b5cf6'
   },
 
+  // Skill Matcher tool
+  'SkillMatcher': {
+    toolName: 'SkillMatcher',
+    displayName: 'Skill Matcher',
+    icon: 'SM',
+    requiresConfirmation: false,
+    resultDisplayType: 'detailed',
+    description: 'Match user input to skills',
+    displayMode: 'standard',
+    primaryColor: '#8b5cf6'
+  },
+
   // AskUserQuestion tool
   'AskUserQuestion': {
     toolName: 'AskUserQuestion',
@@ -386,6 +399,7 @@ export const TOOL_CARD_COMPONENTS = {
 
   // Skill tool
   'Skill': SkillDisplay,
+  'SkillMatcher': SkillMatcherDisplay,
 
   // AskUserQuestion tool
   'AskUserQuestion': AskUserQuestionCard,

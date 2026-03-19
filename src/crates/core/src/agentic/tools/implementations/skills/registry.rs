@@ -57,7 +57,7 @@ impl SkillRegistry {
     /// Cache duration: 5 minutes
     const CACHE_DURATION: Duration = Duration::from_secs(5 * 60);
 
-    fn is_cache_valid(&self) -> async -> bool {
+    async fn is_cache_valid(&self) -> bool {
         let timestamp = self.cache_timestamp.read().await;
         if let Some(ts) = *timestamp {
             ts.elapsed() < Self::CACHE_DURATION
@@ -69,18 +69,7 @@ impl SkillRegistry {
     fn get_possible_paths_for_workspace(workspace_root: Option<&Path>) -> Vec<SkillDirEntry> {
         let mut entries = Vec::new();
 
-        if let Some(workspace_path) = workspace_root {
-            for (parent, sub) in PROJECT_SKILL_SUBDIRS {
-                let p = workspace_path.join(parent).join(sub);
-                if p.exists() && p.is_dir() {
-                    entries.push(SkillDirEntry {
-                        path: p,
-                        level: SkillLocation::Project,
-                    });
-                }
-            }
-        }
-
+        // Always scan user-level directories (even when workspace is specified)
         let pm = get_path_manager_arc();
         let bitfun_skills = pm.user_skills_dir();
         if bitfun_skills.exists() && bitfun_skills.is_dir() {
@@ -109,6 +98,19 @@ impl SkillRegistry {
                     path: p,
                     level: SkillLocation::User,
                 });
+            }
+        }
+
+        // Scan project-level directories only if workspace is specified
+        if let Some(workspace_path) = workspace_root {
+            for (parent, sub) in PROJECT_SKILL_SUBDIRS {
+                let p = workspace_path.join(parent).join(sub);
+                if p.exists() && p.is_dir() {
+                    entries.push(SkillDirEntry {
+                        path: p,
+                        level: SkillLocation::Project,
+                    });
+                }
             }
         }
 
@@ -258,10 +260,6 @@ impl SkillRegistry {
             self.refresh().await;
         }
     }
-            drop(cache);
-            self.refresh().await;
-        }
-    }
 
     /// Get all skill information (including enabled status)
     ///
@@ -287,6 +285,18 @@ impl SkillRegistry {
         self.get_all_skills()
             .await
             .into_iter()
+            .filter(|s| s.enabled)
+            .collect()
+    }
+
+    /// Get enabled skills for workspace (no cache, direct scan)
+    pub async fn get_enabled_skills_for_workspace(
+        &self,
+        workspace_root: Option<&Path>,
+    ) -> Vec<SkillInfo> {
+        self.scan_skill_map_for_workspace(workspace_root)
+            .await
+            .into_values()
             .filter(|s| s.enabled)
             .collect()
     }

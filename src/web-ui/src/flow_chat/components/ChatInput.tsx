@@ -42,6 +42,8 @@ import { Tooltip, IconButton } from '@/component-library';
 import { useAgentCanvasStore } from '@/app/components/panels/content-canvas/stores';
 import { openBtwSessionInAuxPane, selectActiveBtwSessionTab } from '../services/openBtwSession';
 import { resolveSessionRelationship } from '../utils/sessionMetadata';
+import { configAPI } from '@/infrastructure/api/service-api/ConfigAPI';
+import type { SkillInfo } from '@/infrastructure/config/types';
 import './ChatInput.scss';
 
 const log = createLogger('ChatInput');
@@ -59,13 +61,20 @@ type SlashActionItem = {
   label: string;
 };
 
+type SlashSkillItem = {
+  kind: 'skill';
+  id: string;
+  name: string;
+  description: string;
+};
+
 type SlashModeItem = {
   kind: 'mode';
   id: string;
   name: string;
 };
 
-type SlashPickerItem = SlashActionItem | SlashModeItem;
+type SlashPickerItem = SlashActionItem | SlashSkillItem | SlashModeItem;
 type ChatInputTarget = 'main' | 'btw';
 
 export const ChatInput: React.FC<ChatInputProps> = ({
@@ -87,6 +96,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [savedDraft, setSavedDraft] = useState('');
   const [inputTarget, setInputTarget] = useState<ChatInputTarget>('main');
+
+  // Skills for slash command
+  const [availableSkills, setAvailableSkills] = useState<SkillInfo[]>([]);
+
   const { addMessage: addToHistory, getSessionHistory } = useInputHistoryStore();
   
   const contexts = useContextStore(state => state.contexts);
@@ -471,6 +484,30 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     
     return () => {
       globalEventBus.off('mode:config:updated', handleModeConfigUpdated);
+    };
+  }, []);
+
+  // Fetch available skills for slash command
+  React.useEffect(() => {
+    const fetchAvailableSkills = async () => {
+      try {
+        const skills = await configAPI.getSkillConfigs({});
+        setAvailableSkills(skills.filter(s => s.enabled));
+      } catch (error) {
+        log.error('Failed to fetch available skills', { error });
+      }
+    };
+
+    fetchAvailableSkills();
+
+    const handleSkillConfigUpdated = () => {
+      fetchAvailableSkills();
+    };
+
+    globalEventBus.on('skill:config:updated', handleSkillConfigUpdated);
+
+    return () => {
+      globalEventBus.off('skill:config:updated', handleSkillConfigUpdated);
     };
   }, []);
 
@@ -892,6 +929,33 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     });
   }, [isBtwSession, slashCommandState.query, t]);
 
+  // Filter skills based on query
+  const getFilteredSkills = useCallback((): SlashSkillItem[] => {
+    const q = (slashCommandState.query || '').trim().toLowerCase();
+    if (!q) {
+      // Return first 5 skills if no query
+      return availableSkills.slice(0, 5).map(skill => ({
+        kind: 'skill' as const,
+        id: skill.name,
+        name: skill.name,
+        description: skill.description,
+      }));
+    }
+
+    return availableSkills
+      .filter(skill =>
+        skill.name.toLowerCase().includes(q) ||
+        skill.description.toLowerCase().includes(q)
+      )
+      .slice(0, 5)
+      .map(skill => ({
+        kind: 'skill' as const,
+        id: skill.name,
+        name: skill.name,
+        description: skill.description,
+      }));
+  }, [availableSkills, slashCommandState.query]);
+
   const getSlashPickerItems = useCallback((): SlashPickerItem[] => {
     const actions = getFilteredActions();
     const modes: SlashModeItem[] = getFilteredModes().map(mode => ({
@@ -899,10 +963,19 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       id: mode.id,
       name: mode.name,
     }));
-    return [...actions, ...modes];
-  }, [getFilteredActions, getFilteredModes]);
+    const skills = getFilteredSkills();
+    return [...actions, ...skills, ...modes];
+  }, [getFilteredActions, getFilteredModes, getFilteredSkills]);
 
-  const selectSlashCommandAction = useCallback((actionId: string) => {
+  const selectSlashCommandAction = useCallback((actionId: string, itemKind?: string) => {
+    // Handle skill selection
+    if (itemKind === 'skill') {
+      dispatchInput({ type: 'SET_VALUE', payload: `/${actionId} ` });
+      setSlashCommandState({ isActive: false, kind: 'modes', query: '', selectedIndex: 0 });
+      window.setTimeout(() => richTextInputRef.current?.focus(), 0);
+      return;
+    }
+
     if (isBtwSession) return;
     if (actionId !== 'btw') return;
 
@@ -988,13 +1061,13 @@ export const ChatInput: React.FC<ChatInputProps> = ({
               selectSlashCommandMode(mode.id);
             } else if (slashCommandState.kind === 'actions') {
               const action = items[slashCommandState.selectedIndex] as any;
-              selectSlashCommandAction(action.id);
+              selectSlashCommandAction(action.id, action.kind);
             } else {
               const item = items[slashCommandState.selectedIndex] as SlashPickerItem;
               if (item.kind === 'mode') {
                 selectSlashCommandMode(item.id);
               } else {
-                selectSlashCommandAction(item.id);
+                selectSlashCommandAction(item.id, item.kind);
               }
             }
           }
@@ -1021,13 +1094,13 @@ export const ChatInput: React.FC<ChatInputProps> = ({
               selectSlashCommandMode(mode.id);
             } else if (slashCommandState.kind === 'actions') {
               const action = items[slashCommandState.selectedIndex] as any;
-              selectSlashCommandAction(action.id);
+              selectSlashCommandAction(action.id, action.kind);
             } else {
               const item = items[slashCommandState.selectedIndex] as SlashPickerItem;
               if (item.kind === 'mode') {
                 selectSlashCommandMode(item.id);
               } else {
-                selectSlashCommandAction(item.id);
+                selectSlashCommandAction(item.id, item.kind);
               }
             }
           }
@@ -1550,14 +1623,22 @@ export const ChatInput: React.FC<ChatInputProps> = ({
                             <div
                               key={`${item.kind}-${item.id}`}
                               className={`bitfun-chat-input__slash-command-item ${index === slashCommandState.selectedIndex ? 'bitfun-chat-input__slash-command-item--selected' : ''} ${item.kind === 'mode' && item.id === modeState.current ? 'bitfun-chat-input__slash-command-item--active' : ''}`}
-                              onClick={() => item.kind === 'mode' ? selectSlashCommandMode(item.id) : selectSlashCommandAction(item.id)}
+                              onClick={() => item.kind === 'mode' ? selectSlashCommandMode(item.id) : selectSlashCommandAction(item.id, item.kind)}
                               onMouseEnter={() => setSlashCommandState(prev => ({ ...prev, selectedIndex: index }))}
                             >
                               <span className="bitfun-chat-input__slash-command-name">
-                                {item.kind === 'mode' ? `/${item.id}` : item.command}
+                                {item.kind === 'mode' ? `/${item.id}` : item.kind === 'skill' ? `/${(item as any).name}` : (item as any).command}
                               </span>
                               <span className="bitfun-chat-input__slash-command-label">
-                                {item.kind === 'mode' ? item.name : item.label}
+                                {item.kind === 'skill' ? (
+                                  <Tooltip content={(item as any).description} placement="right">
+                                    <span style={{ display: 'inline-block', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                      {(item as any).description}
+                                    </span>
+                                  </Tooltip>
+                                ) : (
+                                  item.kind === 'mode' ? item.name : (item as any).label
+                                )}
                               </span>
                               {item.kind === 'mode' && item.id === modeState.current && <span className="bitfun-chat-input__slash-command-current">{t('chatInput.current')}</span>}
                             </div>

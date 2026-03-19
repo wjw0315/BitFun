@@ -216,11 +216,13 @@ export type SkillLevel = 'user' | 'project';
 
 
 export interface SkillInfo {
-  name: string;         
-  description: string;  
-  path: string;         
+  name: string;
+  description: string;
+  path: string;
   level: SkillLevel;
   enabled: boolean;
+  keywords: string[];
+  triggerPatterns: string[];
 }
 
 export interface SkillMarketItem {

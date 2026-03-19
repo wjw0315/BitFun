@@ -101,16 +101,18 @@ impl IntentMatcher {
             }
         }
 
-        // 3. Check description similarity (lower priority)
-        if best_confidence == 0.0 {
-            let desc_words: Vec<&str> = skill.description.to_lowercase().split_whitespace().collect();
-            let overlap = input_words
-                .iter()
-                .filter(|w| desc_words.contains(w))
-                .count();
-            if !overlap.is_empty() {
-                let similarity = overlap as f32 / input_words.len().max(1) as f32;
-                best_confidence = similarity * 0.5; // Lower weight for description
+        // 3. Check description similarity (always check, but keywords/triggers have higher priority)
+        let desc_lower = skill.description.to_lowercase();
+        let desc_words: Vec<&str> = desc_lower.split_whitespace().collect();
+        let overlap = input_words
+            .iter()
+            .filter(|w| desc_words.contains(w))
+            .count();
+        if overlap > 0 {
+            let similarity = overlap as f32 / input_words.len().max(1) as f32;
+            // Only apply if better than existing keyword/trigger match (0.8/0.9)
+            if similarity * 0.5 > best_confidence {
+                best_confidence = similarity * 0.5;
                 best_match_type = MatchType::Description;
             }
         }
