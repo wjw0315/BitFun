@@ -7,7 +7,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Pencil, Trash2, Check, X, Bot, Code2, Users, MoreHorizontal } from 'lucide-react';
+import { Pencil, Trash2, Check, X, Bot, Code2, Users, MoreHorizontal, Loader2 } from 'lucide-react';
 import { IconButton, Input, Tooltip } from '@/component-library';
 import { useI18n } from '@/infrastructure/i18n';
 import { flowChatStore } from '../../../../../flow_chat/store/FlowChatStore';
@@ -26,11 +26,13 @@ import {
 import { resolveSessionRelationship } from '@/flow_chat/utils/sessionMetadata';
 import { compareSessionsForDisplay } from '@/flow_chat/utils/sessionOrdering';
 import { getCompleteSessionStatus, type SessionTaskStatus } from '@/flow_chat/utils/sessionTaskStatus';
+import { stateMachineManager } from '@/flow_chat/state-machine';
+import { SessionExecutionState } from '@/flow_chat/state-machine/types';
 import './SessionsSection.scss';
 
-const MAX_VISIBLE_SESSIONS = 8;
-const INACTIVE_WORKSPACE_COLLAPSED_SESSIONS = 3;
-const INACTIVE_WORKSPACE_EXPANDED_SESSIONS = 7;
+/** Top-level parent sessions shown at each expand step (children still nest under visible parents). */
+const SESSIONS_LEVEL_0 = 5;
+const SESSIONS_LEVEL_1 = 10;
 const log = createLogger('SessionsSection');
 const AGENT_SCENE: SceneTabId = 'session';
 
@@ -99,11 +101,32 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
   );
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState('');
-  const [showAll, setShowAll] = useState(false);
+  const [expandLevel, setExpandLevel] = useState<0 | 1 | 2>(0);
   const [openMenuSessionId, setOpenMenuSessionId] = useState<string | null>(null);
   const [sessionMenuPosition, setSessionMenuPosition] = useState<{ top: number; left: number } | null>(null);
+  const [runningSessionIds, setRunningSessionIds] = useState<Set<string>>(new Set());
   const editInputRef = useRef<HTMLInputElement>(null);
   const sessionMenuPopoverRef = useRef<HTMLDivElement>(null);
+
+  // Subscribe to state machine changes for running status
+  useEffect(() => {
+    const updateRunningSessions = () => {
+      const running = new Set<string>();
+      for (const session of flowChatState.sessions.values()) {
+        const machine = stateMachineManager.get(session.sessionId);
+        if (machine && machine.getCurrentState() === SessionExecutionState.PROCESSING) {
+          running.add(session.sessionId);
+        }
+      }
+      setRunningSessionIds(running);
+    };
+
+    updateRunningSessions();
+    const unsubscribe = stateMachineManager.subscribeGlobal(() => {
+      updateRunningSessions();
+    });
+    return () => unsubscribe();
+  }, [flowChatState.sessions]);
 
   useEffect(() => {
     const unsub = flowChatStore.subscribe(s => setFlowChatState(s));
@@ -118,8 +141,8 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
   }, [editingSessionId]);
 
   useEffect(() => {
-    setShowAll(false);
-  }, [workspaceId, workspacePath, isActiveWorkspace]);
+    setExpandLevel(0);
+  }, [workspaceId, workspacePath]);
 
   useEffect(() => {
     if (!openMenuSessionId) return;
@@ -174,16 +197,11 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
   }, [sessions]);
 
   const sessionDisplayLimit = useMemo(() => {
-    if (isActiveWorkspace) {
-      return showAll || topLevelSessions.length <= MAX_VISIBLE_SESSIONS
-        ? topLevelSessions.length
-        : MAX_VISIBLE_SESSIONS;
-    }
-
-    return showAll
-      ? Math.min(topLevelSessions.length, INACTIVE_WORKSPACE_EXPANDED_SESSIONS)
-      : Math.min(topLevelSessions.length, INACTIVE_WORKSPACE_COLLAPSED_SESSIONS);
-  }, [isActiveWorkspace, topLevelSessions.length, showAll]);
+    const total = topLevelSessions.length;
+    if (expandLevel === 2 || total <= SESSIONS_LEVEL_0) return total;
+    if (expandLevel === 1) return Math.min(total, SESSIONS_LEVEL_1);
+    return SESSIONS_LEVEL_0;
+  }, [topLevelSessions.length, expandLevel]);
 
   const visibleItems = useMemo(() => {
     const visibleParents = topLevelSessions.slice(0, sessionDisplayLimit);
@@ -195,11 +213,6 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
     }
     return out;
   }, [childrenByParent, sessionDisplayLimit, topLevelSessions]);
-
-  const toggleThreshold = isActiveWorkspace
-    ? MAX_VISIBLE_SESSIONS
-    : INACTIVE_WORKSPACE_COLLAPSED_SESSIONS;
-  const hiddenCount = Math.max(0, topLevelSessions.length - toggleThreshold);
 
   const activeSessionId = flowChatState.activeSessionId;
 
@@ -399,6 +412,7 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
               : sessionModeKey === 'claw'
                 ? Bot
                 : Code2;
+          const isRunning = runningSessionIds.has(session.sessionId);
           const isRowActive = activeBtwSessionData?.childSessionId
             ? session.sessionId === activeBtwSessionData.childSessionId
             : activeTabId === AGENT_SCENE && session.sessionId === activeSessionId;
@@ -416,17 +430,27 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
                 .join(' ')}
               onClick={() => handleSwitch(session.sessionId)}
             >
-              <SessionIcon
-                size={12}
-                className={[
-                  'bitfun-nav-panel__inline-item-icon',
-                  sessionModeKey === 'cowork'
-                    ? 'is-cowork'
-                    : sessionModeKey === 'claw'
-                      ? 'is-claw'
-                      : 'is-code',
-                ].join(' ')}
-              />
+              {isRunning ? (
+                <Loader2
+                  size={12}
+                  className={[
+                    'bitfun-nav-panel__inline-item-icon',
+                    'is-running',
+                  ].join(' ')}
+                />
+              ) : (
+                <SessionIcon
+                  size={12}
+                  className={[
+                    'bitfun-nav-panel__inline-item-icon',
+                    sessionModeKey === 'cowork'
+                      ? 'is-cowork'
+                      : sessionModeKey === 'claw'
+                        ? 'is-claw'
+                        : 'is-code',
+                  ].join(' ')}
+                />
+              )}
 
               {isEditing ? (
                 <div className="bitfun-nav-panel__inline-item-edit" onClick={e => e.stopPropagation()}>
@@ -517,19 +541,43 @@ const SessionsSection: React.FC<SessionsSectionProps> = ({
         })
       )}
 
-      {topLevelSessions.length > toggleThreshold && (
+      {topLevelSessions.length > SESSIONS_LEVEL_0 && (
         <button
           type="button"
           className="bitfun-nav-panel__inline-toggle"
-          onClick={() => setShowAll(prev => !prev)}
+          onClick={() => {
+            const total = topLevelSessions.length;
+            if (expandLevel === 0) {
+              setExpandLevel(1);
+              return;
+            }
+            if (expandLevel === 1 && total > SESSIONS_LEVEL_1) {
+              setExpandLevel(2);
+              return;
+            }
+            setExpandLevel(0);
+          }}
         >
-          {showAll ? (
-            <span>{t('nav.sessions.showLess')}</span>
-          ) : (
+          {expandLevel === 0 ? (
             <>
               <span className="bitfun-nav-panel__inline-toggle-dots">···</span>
-              <span>{t('nav.sessions.showMore', { count: hiddenCount })}</span>
+              <span>
+                {t('nav.sessions.showMore', {
+                  count: topLevelSessions.length - SESSIONS_LEVEL_0,
+                })}
+              </span>
             </>
+          ) : expandLevel === 1 && topLevelSessions.length > SESSIONS_LEVEL_1 ? (
+            <>
+              <span className="bitfun-nav-panel__inline-toggle-dots">···</span>
+              <span>
+                {t('nav.sessions.showAll', {
+                  count: topLevelSessions.length - SESSIONS_LEVEL_1,
+                })}
+              </span>
+            </>
+          ) : (
+            <span>{t('nav.sessions.showLess')}</span>
           )}
         </button>
       )}
