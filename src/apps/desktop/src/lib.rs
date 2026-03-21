@@ -145,15 +145,8 @@ pub async fn run() {
             #[cfg(target_os = "macos")]
             {
                 app.on_menu_event(|app, event| {
-                    let event_name = if event.id() == "bitfun.open_project" {
-                        Some("bitfun_menu_open_project")
-                    } else if event.id() == "bitfun.new_project" {
-                        Some("bitfun_menu_new_project")
-                    } else if event.id() == "bitfun.about" {
-                        Some("bitfun_menu_about")
-                    } else {
-                        None
-                    };
+                    let event_name =
+                        crate::macos_menubar::menu_event_name_for_id(event.id().as_ref());
 
                     if let Some(event_name) = event_name {
                         let _ = app.emit(event_name, ());
@@ -214,6 +207,7 @@ pub async fn run() {
                 let app_state: tauri::State<'_, api::app_state::AppState> = app.state();
                 let config_service = app_state.config_service.clone();
                 let workspace_path = app_state.workspace_path.clone();
+                let macos_edit_menu_mode = app_state.macos_edit_menu_mode.clone();
 
                 tokio::spawn(async move {
                     let language = config_service
@@ -227,11 +221,13 @@ pub async fn run() {
                     } else {
                         crate::macos_menubar::MenubarMode::Startup
                     };
+                    let edit_mode = *macos_edit_menu_mode.read().await;
 
                     let _ = crate::macos_menubar::set_macos_menubar_with_mode(
                         &app_handle_for_menu,
                         &language,
                         mode,
+                        edit_mode,
                     );
                 });
             }
@@ -307,6 +303,8 @@ pub async fn run() {
             api::btw_api::btw_ask,
             api::btw_api::btw_ask_stream,
             api::btw_api::btw_cancel,
+            api::editor_ai_api::editor_ai_stream,
+            api::editor_ai_api::editor_ai_cancel,
             api::context_upload_api::upload_image_contexts,
             get_all_tools_info,
             get_readonly_tools_info,
@@ -336,6 +334,7 @@ pub async fn run() {
             check_path_exists,
             get_file_metadata,
             rename_file,
+            export_local_file_to_path,
             reveal_in_explorer,
             get_file_tree,
             get_directory_children,
@@ -549,6 +548,7 @@ pub async fn run() {
             cleanup_invalid_workspaces,
             get_opened_workspaces,
             open_workspace,
+            open_remote_workspace,
             create_assistant_workspace,
             delete_assistant_workspace,
             reset_assistant_workspace,
@@ -580,6 +580,7 @@ pub async fn run() {
             check_command_exists,
             check_commands_exist,
             run_system_command,
+            set_macos_edit_menu_mode,
             i18n_get_current_language,
             i18n_set_language,
             i18n_get_supported_languages,
@@ -638,6 +639,30 @@ pub async fn run() {
             api::insights_api::load_insights_report,
             api::insights_api::has_insights_data,
             api::insights_api::cancel_insights_generation,
+            // SSH Remote API
+            api::ssh_api::ssh_list_saved_connections,
+            api::ssh_api::ssh_save_connection,
+            api::ssh_api::ssh_delete_connection,
+            api::ssh_api::ssh_connect,
+            api::ssh_api::ssh_disconnect,
+            api::ssh_api::ssh_disconnect_all,
+            api::ssh_api::ssh_is_connected,
+            api::ssh_api::ssh_get_config,
+            api::ssh_api::ssh_list_config_hosts,
+            api::ssh_api::remote_read_file,
+            api::ssh_api::remote_write_file,
+            api::ssh_api::remote_exists,
+            api::ssh_api::remote_read_dir,
+            api::ssh_api::remote_get_tree,
+            api::ssh_api::remote_create_dir,
+            api::ssh_api::remote_remove,
+            api::ssh_api::remote_rename,
+            api::ssh_api::remote_download_to_local_path,
+            api::ssh_api::remote_upload_from_local_path,
+            api::ssh_api::remote_execute,
+            api::ssh_api::remote_open_workspace,
+            api::ssh_api::remote_close_workspace,
+            api::ssh_api::remote_get_workspace_info,
         ])
         .run(tauri::generate_context!());
     if let Err(e) = run_result {

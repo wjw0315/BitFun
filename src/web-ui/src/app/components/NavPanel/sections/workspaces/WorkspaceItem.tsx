@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Folder, FolderOpen, MoreHorizontal, GitBranch, FolderSearch, Plus, ChevronDown, Trash2, RotateCcw } from 'lucide-react';
+import { Folder, FolderOpen, MoreHorizontal, GitBranch, FolderSearch, Plus, ChevronDown, Trash2, RotateCcw, Copy } from 'lucide-react';
 import { ConfirmDialog, Tooltip } from '@/component-library';
 import { useI18n } from '@/infrastructure/i18n';
 import { useWorkspaceContext } from '@/infrastructure/contexts/WorkspaceContext';
@@ -12,7 +12,8 @@ import { notificationService } from '@/shared/notification-system';
 import { flowChatManager } from '@/flow_chat/services/FlowChatManager';
 import { BranchSelectModal, type BranchSelectResult } from '../../../panels/BranchSelectModal';
 import SessionsSection from '../sessions/SessionsSection';
-import { WorkspaceKind, type WorkspaceInfo } from '@/shared/types';
+import { WorkspaceKind, isRemoteWorkspace, type WorkspaceInfo } from '@/shared/types';
+import { SSHContext } from '@/features/ssh-remote/SSHRemoteProvider';
 
 interface WorkspaceItemProps {
   workspace: WorkspaceInfo;
@@ -59,6 +60,12 @@ const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
     workspace.workspaceKind === WorkspaceKind.Assistant
       ? workspace.identity?.name?.trim() || workspace.name
       : workspace.name;
+
+  // Remote connection status — optional: safe if not inside SSHRemoteProvider
+  const sshContext = useContext(SSHContext);
+  const remoteConnStatus = workspace.connectionId && sshContext
+    ? (sshContext.workspaceStatuses[workspace.connectionId] ?? 'connecting')
+    : undefined;
 
   const updateMenuPosition = useCallback(() => {
     const anchor = menuAnchorRef.current;
@@ -188,11 +195,27 @@ const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
 
   const handleReveal = useCallback(async () => {
     setMenuOpen(false);
+    if (isRemoteWorkspace(workspace)) return;
     try {
       await workspaceAPI.revealInExplorer(workspace.rootPath);
     } catch (error) {
       notificationService.error(
         error instanceof Error ? error.message : t('nav.workspaces.revealFailed'),
+        { duration: 4000 }
+      );
+    }
+  }, [t, workspace]);
+
+  const handleCopyWorkspacePath = useCallback(async () => {
+    setMenuOpen(false);
+    const path = workspace.rootPath;
+    if (!path) return;
+    try {
+      await navigator.clipboard.writeText(path);
+      notificationService.success(t('contextMenu.status.copyPathSuccess'), { duration: 2000 });
+    } catch (error) {
+      notificationService.error(
+        error instanceof Error ? error.message : t('nav.workspaces.copyPathFailed'),
         { duration: 4000 }
       );
     }
@@ -353,7 +376,21 @@ const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
                     <span className="bitfun-nav-panel__workspace-item-menu-label">{t('nav.workspaces.actions.deleteAssistant')}</span>
                   </button>
                 )}
-                <button type="button" className="bitfun-nav-panel__workspace-item-menu-item" onClick={() => { void handleReveal(); }}>
+                <button
+                  type="button"
+                  className="bitfun-nav-panel__workspace-item-menu-item"
+                  onClick={() => { void handleCopyWorkspacePath(); }}
+                  disabled={!workspace.rootPath}
+                >
+                  <Copy size={13} />
+                  <span className="bitfun-nav-panel__workspace-item-menu-label">{t('nav.workspaces.actions.copyPath')}</span>
+                </button>
+                <button
+                  type="button"
+                  className="bitfun-nav-panel__workspace-item-menu-item"
+                  onClick={() => { void handleReveal(); }}
+                  disabled={isRemoteWorkspace(workspace)}
+                >
                   <FolderSearch size={13} />
                   <span className="bitfun-nav-panel__workspace-item-menu-label">{t('nav.workspaces.actions.reveal')}</span>
                 </button>
@@ -433,10 +470,19 @@ const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
           className="bitfun-nav-panel__workspace-item-name-btn"
           onClick={() => { void handleCardNameClick(); }}
         >
-          <span className="bitfun-nav-panel__workspace-item-title">
+          <span className={`bitfun-nav-panel__workspace-item-title${isRemoteWorkspace(workspace) ? ' is-remote' : ''}`}>
             <span className="bitfun-nav-panel__workspace-item-label">{workspaceDisplayName}</span>
+            {isRemoteWorkspace(workspace) && (
+              <span className="bitfun-nav-panel__workspace-item-subtitle">
+                <span
+                  className={`bitfun-nav-panel__workspace-item-status-dot is-${remoteConnStatus ?? 'connecting'}`}
+                  aria-label={remoteConnStatus ?? 'connecting'}
+                />
+                <span>{workspace.connectionName}</span>
+              </span>
+            )}
           </span>
-          {currentBranch ? (
+          {!isRemoteWorkspace(workspace) && currentBranch ? (
             <span className="bitfun-nav-panel__workspace-item-branch">
               <GitBranch size={11} />
               <span>{currentBranch}</span>
@@ -491,7 +537,21 @@ const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
                 <GitBranch size={13} />
                 <span className="bitfun-nav-panel__workspace-item-menu-label">{t('nav.workspaces.actions.newWorktree')}</span>
               </button>
-              <button type="button" className="bitfun-nav-panel__workspace-item-menu-item" onClick={() => { void handleReveal(); }}>
+              <button
+                type="button"
+                className="bitfun-nav-panel__workspace-item-menu-item"
+                onClick={() => { void handleCopyWorkspacePath(); }}
+                disabled={!workspace.rootPath}
+              >
+                <Copy size={13} />
+                <span className="bitfun-nav-panel__workspace-item-menu-label">{t('nav.workspaces.actions.copyPath')}</span>
+              </button>
+              <button
+                type="button"
+                className="bitfun-nav-panel__workspace-item-menu-item"
+                onClick={() => { void handleReveal(); }}
+                disabled={isRemoteWorkspace(workspace)}
+              >
                 <FolderSearch size={13} />
                 <span className="bitfun-nav-panel__workspace-item-menu-label">{t('nav.workspaces.actions.reveal')}</span>
               </button>
